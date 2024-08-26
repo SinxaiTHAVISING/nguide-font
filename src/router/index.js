@@ -13,6 +13,7 @@ import TourismRegistor from '../views/Tourism/TourismRegistor.vue'
 import TourismRegistorMap from '../views/Tourism/GetMap.vue'
 // MyInfo
 import MyInfo from '../views/MyInfo/MyInfo.vue'
+import EditMyInfo from '../views/MyInfo/EditInfo.vue'
 import MyLand from '../views/MyLand/MyLand.vue'
 import EditMyland from '../views/MyLand/EditLand.vue'
 //operation
@@ -105,6 +106,14 @@ const routes = [
     component: MyInfo,
     meta: {
       title: 'myinfo'
+    }
+  },
+  {
+    path: '/edit/myinfo',
+    name: 'Editmyinfo',
+    component: EditMyInfo,
+    meta: {
+      title: 'EditMyinfo'
     }
   },
   {

@@ -88,7 +88,7 @@
             </div>
         </div>
         <!-- Alert Step 1 -->
-        <div v-if="isStep1Dialog" class="flex w-96  rounded-md border border-[#ff7100] guideAlert" id="">
+        <div v-if="isStep1Dialog" class="flex w-96  rounded-md border border-[#ff7100] guideAlert1" id="">
             <div class="basis-16 flex items-start h-15 w-6 rounded-full overflow-hidden">
                 <img src="../../../public/logo/LogoFull.png" class="object-cover w-full h-full" />
             </div>
@@ -110,7 +110,7 @@
         </div>
 
         <!-- Alert Step 2 -->
-        <div v-if="isStep2Dialog" class="flex w-96 rounded-md border border-[#ff7100] guideAlertEdit" id="">
+        <div v-if="isStep2Dialog" class="flex w-96 rounded-md border border-[#ff7100] guideAlert2" id="">
             <div class="basis-16 flex items-start h-15 w-6 rounded-full overflow-hidden">
                 <img src="../../../public/logo/LogoFull.png" class="object-cover w-full h-full" />
             </div>
@@ -149,10 +149,7 @@ const showStep2 = () => {
     buttonDisabled.value = !buttonDisabled.value;
 }
 const edit = () => {
-    if (add.password === '12345') {
-        errors.password = 'Your cant not use default password';
-    }
-    else if (add.password === '') {
+    if (add.password === '12345'|| add.password === '') {
         errors.password = 'Your cant not use default password';
     }
     else {
@@ -245,17 +242,17 @@ const characterCount = computed(() => `${add.comment.length}/${maxCommentLength}
     width: 90px;
     background-color: #132d5c;
 }
-.guideAlert {
+.guideAlert1 {
     position: absolute;
     float: left;
-    top: 80%;
+    top: 42%;
     left: 60%;
     background-color: #fde8e8;
     padding: 20px;
     border-color: orange;
 }
 
-.guideAlertEdit {
+.guideAlert2 {
     position: absolute;
     float: left;
     top: 75%;

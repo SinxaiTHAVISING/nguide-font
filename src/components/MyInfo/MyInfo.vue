@@ -1,5 +1,4 @@
-<script>
-</script>
+
 <template>
     <div class="container  mt-5...">
         <div class="flex ...">
@@ -10,10 +9,9 @@
             </div>
             <div class="flex-none w-32 h-14 mr-8 ...">
                 <button class="px-4 py-2 border font-semibold rounded-lg shadow-md w-40 btn-editInfo"
-                    onclick="my_modal_1.showModal()">
+                @click="showDialog">
                     Edit information
                 </button>
-<!-- ------------------------------------------------------- -->
             </div>
         </div>
     </div>
@@ -125,7 +123,39 @@
             <textarea name="" id="" cols="" rows="8" class="w-full border rounded-md mt-2" maxlength="5000"></textarea>
         </form>
     </div>
+<!----------------------------- Dialog---------------------------->
+    <div   v-if="dialogVisible" class="flex w-96 rounded-md shadow-md" id="Dialog">
+        <div class="flex-1 px-2 py-1">
+            <div class="p-1">
+                <span class="text-md font-bold text-center">Enter your password</span>
+            </div>
+            <div class="p-1 text-black">
+                <input type="password" name="" id="" class="w-full p-2 border rounded" placeholder="Please enter your password">
+            </div>
+            <div class="flex justify-center mt-5">
+                <button @click="edit" class="rounded-xl border px-3 py-1 font-bold mt-1 w-20 mx-2 hover:bg-[#132d5c] hover:text-white">
+                    Cancel
+                </button>
+                <button @click="edit" class="rounded-xl border px-3 py-1 font-bold mt-1 text-white bg-[#132d5c] hover:bg-white hover:text-black w-20 mx-2">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
 </template>
+<script setup>
+import { ref } from 'vue';
+
+const dialogVisible = ref(false);
+// const password = ref('');
+
+// Function to show the dialog
+let showDialog = () => {
+  dialogVisible.value = true;
+};
+
+</script>
 
 <style>
 .btn-editInfo {
@@ -163,5 +193,15 @@
 
 .swal2-confirm {
     width: 90px;
+}
+#Dialog {
+    position: absolute;
+    float: left;
+    top: 50%;
+    left: 40%;
+    background-color: #ffffff;
+    padding: 20px;
+    border-color: orange;
+    /* display: none; */
 }
 </style>
