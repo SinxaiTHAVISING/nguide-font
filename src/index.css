@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+h1{
+    @apply text-2xl;
+    @apply text-red-400;
+    @apply font-extrabold;
+}
+}
