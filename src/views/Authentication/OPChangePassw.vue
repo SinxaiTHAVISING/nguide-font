@@ -170,10 +170,10 @@ const remainingCharacters = computed(() => maxCommentLength - add.comment.length
 
 // Computed property to show current length and max length
 const characterCount = computed(() => `${add.comment.length}/${maxCommentLength}`);
+
 </script>
 
 <style>
-
 #edit {
     background-color: #667085;
 }

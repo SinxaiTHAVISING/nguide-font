@@ -1,13 +1,20 @@
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import HeaderArea from '@/components/Header/HeaderArea.vue'
 import SidebarArea from '@/components/Sidebar/SidebarArea.vue'
+// Access the current route
+const route = useRoute()
+
+// Condition to disable the sidebar
+const isDisabled = computed(() => route.path === '/land/change/password')
 </script>
 
 <template>
   <!-- ===== Page Wrapper Start ===== -->
   <div class="flex h-screen overflow-hidden">
     <!-- ===== Sidebar Start ===== -->
-    <SidebarArea />
+    <SidebarArea :class="{ 'pointer-events-none opacity-50': isDisabled }"/>
     <!-- ===== Sidebar End ===== -->
 
     <!-- ===== Content Area Start ===== -->
