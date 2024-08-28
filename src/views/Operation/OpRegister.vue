@@ -1,10 +1,10 @@
 <script setup>
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import AdminList from '../../components/AdminManage/AdminList.vue'
+import OpRegister from '@/components/Operation/OpRegister.vue'
 </script>
 
 <template>
   <DefaultLayout>
-    <AdminList/>
+    <OpRegister/>
   </DefaultLayout>
 </template>

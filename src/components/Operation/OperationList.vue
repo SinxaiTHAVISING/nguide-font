@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
                 <div class="grow h-14 ...">
                 </div>
                 <div class="flex-none w-32 h-14 mr-8 ...">
-                    <RouterLink to="">
+                    <RouterLink to="/operation/register">
                         <button
                             class="px-4 py-2 font-semibold rounded-lg shadow-md text-[#fff] bg-[#667085] w-40">
                             Regiter OP

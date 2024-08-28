@@ -1,12 +1,11 @@
 <script setup>
 import { useSidebarStore } from '@/stores/sidebar'
 import { onClickOutside } from '@vueuse/core'
-import { ref } from 'vue'
-// import SidebarItem from './SidebarItem.vue'
+import { onMounted, ref } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
-import { LayoutGrid, CableCar, NotebookPen, ChevronDown, MessageSquare, IdCard } from 'lucide-vue-next';
-const target = ref(null)
+import { LayoutGrid, CableCar, NotebookPen, ChevronDown, MessageSquare, IdCard, Building2 } from 'lucide-vue-next';
 
+const target = ref(null)
 const sidebarStore = useSidebarStore()
 
 onClickOutside(target, () => {
@@ -23,6 +22,14 @@ const toggleInfo = () => {
   infoOpen.value = !infoOpen.value;
 };
 
+const userType = ref(null);
+function getLocal () {
+  const data = JSON.parse(localStorage.getItem('responeData')) 
+  userType.value = data.usertype;
+}
+onMounted(() => {
+  getLocal();
+})
 </script>
 
 <template>
@@ -33,10 +40,9 @@ const toggleInfo = () => {
       '-translate-x-full': !sidebarStore.isSidebarOpen
     }" ref="target">
     <!-- SIDEBAR HEADER -->
-    <div class="flex items-center justify-between gap-2 px-6 py-1 lg:py-">
+    <div class="flex items-center justify-between gap-2 px-6 py-1 lg:py-4">
       <router-link to="/">
         <img src="@/assets/images/logo/logoNg.png" alt="Logo" />
-
       </router-link>
 
       <button class="block lg:hidden" @click="sidebarStore.isSidebarOpen = false">
@@ -48,68 +54,105 @@ const toggleInfo = () => {
     <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
       <!-- Sidebar Menu -->
       <ul class="space-y-2 font-medium text-white p-2">
-        <li>
-          <routerLink :to="{ name: 'LandDashboard' }"
+          <li v-if="userType === 1">
+          <router-link :to="{ name: 'AdminDashboard' }"
             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <LayoutGrid />
             <span class="ms-3">Dashboard</span>
-          </routerLink>
+          </router-link>
         </li>
-        <li>
-          <routerLink to="/tourism/item"
+          <li v-if="userType === 2">
+          <router-link :to="{ name: 'LandDashboard' }"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <LayoutGrid />
+            <span class="ms-3">Dashboard</span>
+          </router-link>
+        </li>
+          <li v-if="userType === 3">
+          <router-link :to="{ name: 'OpDashboard' }"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <LayoutGrid />
+            <span class="ms-3">Dashboard</span>
+          </router-link>
+        </li>
+        <li  v-if="userType === 2 || usertype === 3">
+          <router-link to="/tourism/item"
             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <CableCar />
-            <span class="ms-3">tourism management</span>
-          </routerLink>
+            <span class="ms-3">Tourism Management</span>
+          </router-link>
         </li>
-        <li
-          class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+        <li class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
           <router-link to=""
             class="flex items-center text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <NotebookPen />
-            <span class="ms-3">Management quotation</span>
+            <span class="ms-3">Management Quotation</span>
           </router-link>
           <ChevronDown class="lg:ml-3 md:ml-2 cursor-pointer" :class="{ 'rotate-180': isOpen }" @click="toggleMenu" />
-          <ul v-show="isOpen" class="absolute mt-2 w-48 overflow-auto z-10"
-            :style="{ top: '100%' }">
-            <li class="p-2">Quotation Waiting</li>
-            <li class="p-2">Quotation Writing</li>
-            <li class="p-2">Completed Quitation</li>
-            <li class="p-2">Confirmed Quotation</li>
-            <li class="p-2">Cancel</li>
-            <li class="p-2">Check Quotation</li>
-          </ul>
+          <transition name="fade">
+            <ul v-show="isOpen" class="absolute mt-2 w-48 overflow-auto z-10" :style="{ top: '100%' }">
+              <li class="p-2">Quotation Waiting</li>
+              <li class="p-2">Quotation Writing</li>
+              <li class="p-2">Completed Quotation</li>
+              <li class="p-2">Confirmed Quotation</li>
+              <li class="p-2">Cancel</li>
+              <li class="p-2">Check Quotation</li>
+              <li class="p-2">Quotation Write</li>
+            </ul>
+          </transition>
         </li>
-        <li :class="{ 'pt-60': isOpen }">
+        <li :class="{ 'pt-70': isOpen }">
           <router-link to=""
             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <MessageSquare />
             <span class="ms-3">Chatting</span>
           </router-link>
         </li>
-        <li
-          class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+        <li v-if="userType === 2 || userType === 3" class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
           <router-link to=""
+            class="flex items-center text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <NotebookPen />
+            <span class="ms-3">My Information</span>
+          </router-link>
+          <ChevronDown class="lg:ml-3 md:ml-2 cursor-pointer" :class="{ 'rotate-180': infoOpen }" @click="toggleInfo" />
+          <transition name="fade">
+            <ul v-show="infoOpen" class="absolute mt-2 w-48 overflow-auto z-10" :style="{ top: '100%' }">
+              <router-link :to="{ name: 'myinfo' }">
+                <li class="p-2">Manage My Info</li>
+              </router-link>
+              <router-link :to="{ name: 'myland' }">
+                <li class="p-2">Manage My Land</li>
+              </router-link>
+            </ul>
+          </transition>
+        </li>
+        <li v-if="userType === 2" :class="{ 'pt-20': infoOpen }">
+          <router-link to="/operation/list"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <IdCard />
+            <span class="ms-3">OP Manage</span>
+          </router-link>
+        </li>
+        <li  v-if="userType === 1">
+          <router-link to="/admin/land/list"
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <Building2  />
+            <span class="ms-3">Land company management</span>
+          </router-link>
+        </li>
+        <li v-if="userType === 1"
+          class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <router-link to="/admin/info"
             class="flex items-center text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <NotebookPen />
             <span class="ms-3">My information</span>
           </router-link>
-          <ChevronDown class="lg:ml-3 md:ml-2 cursor-pointer" :class="{ 'rotate-180': infoOpen }" @click="toggleInfo" />
-          <ul v-show="infoOpen" class="absolute mt-2 w-48 overflow-auto z-10"
-            :style="{ top: '100%' }">
-            <routerLink :to="{ name: 'myinfo' }">
-              <li class="p-2">Manage my info</li>
-            </routerLink>
-            <routerLink :to="{ name: 'myland' }">
-            <li class="p-2">Manage my land</li>
-          </routerLink>
-          </ul>
         </li>
-        <li :class="{ 'pt-20': infoOpen }">
-          <router-link to="/operation/list"
+        <li v-if="userType ==1">
+          <router-link to="/admin/list"
             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <IdCard />
-            <span class="ms-3">OP manage</span>
+            <span class="ms-3">Administrator manage</span>
           </router-link>
         </li>
       </ul>
@@ -118,14 +161,11 @@ const toggleInfo = () => {
   </aside>
 </template>
 
-<style>
-ul {
+<style scoped>
+.fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;
 }
-ul[style*="display: none"] {
+.fade-enter, .fade-leave-to {
   opacity: 0;
-}
-ul[style*="display: block"] {
-  opacity: 1;
 }
 </style>

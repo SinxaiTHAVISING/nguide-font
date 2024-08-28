@@ -5,7 +5,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 <template>
   <DefaultLayout>
     <div class="text-center">
-      <h1> Develop</h1>
+      <h1>Land Dashboard Develop</h1>
     </div>
   </DefaultLayout>
 </template>

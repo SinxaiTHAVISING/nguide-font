@@ -133,7 +133,7 @@
                 <input type="password" name="" id="" class="w-full p-2 border rounded" placeholder="Please enter your password">
             </div>
             <div class="flex justify-center mt-5">
-                <button @click="edit" class="rounded-xl border px-3 py-1 font-bold mt-1 w-20 mx-2 hover:bg-[#132d5c] hover:text-white">
+                <button @click="Cancel" class="rounded-xl border px-3 py-1 font-bold mt-1 w-20 mx-2 hover:bg-[#132d5c] hover:text-white">
                     Cancel
                 </button>
                 <button @click="edit" class="rounded-xl border px-3 py-1 font-bold mt-1 text-white bg-[#132d5c] hover:bg-white hover:text-black w-20 mx-2">
@@ -153,6 +153,9 @@ const dialogVisible = ref(false);
 // Function to show the dialog
 let showDialog = () => {
   dialogVisible.value = true;
+};
+let Cancel = () => {
+  dialogVisible.value = false;
 };
 
 </script>

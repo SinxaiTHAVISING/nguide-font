@@ -1,10 +1,10 @@
 <script setup>
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import AdminList from '../../components/AdminManage/AdminList.vue'
+import LandRegister from '../../components/AdminManageLand/LandRegister.vue'
 </script>
 
 <template>
   <DefaultLayout>
-    <AdminList/>
+    <LandRegister/>
   </DefaultLayout>
 </template>

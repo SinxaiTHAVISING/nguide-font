@@ -28,7 +28,7 @@
                         <label for="">Name Land company</label>
                     </div>
                     <div class="col-span-6 ...">
-                        <input class="mt-1 block w-full border p-2 rounded-md" placeholder="">
+                        <input class="mt-1 block w-full border p-2 rounded-md" placeholder=""  :value="apiData.lc_name">
                     </div>
                 </div>
                 <div class="grid grid-cols-7 gap-4 py-2">
@@ -36,7 +36,7 @@
                         <label for="">Name of land Company representative</label>
                     </div>
                     <div class="col-span-6 ...">
-                        <input class="mt-1 block w-full border p-2 rounded-md" placeholder="">
+                        <input class="mt-1 block w-full border p-2 rounded-md" placeholder="" :value="apiData.lc_rep_name">
                     </div>
                 </div>
                 <div class="grid grid-cols-7 gap-4 py-2">
@@ -44,7 +44,7 @@
                         <label for="">address</label>
                     </div>
                     <div class="col-span-6 ...">
-                        <input class="mt-1 block w-full border p-2 rounded-md" type="text" placeholder="">
+                        <input class="mt-1 block w-full border p-2 rounded-md" type="text" placeholder=""  :value="apiData.lc_addr">
                     </div>
                 </div>
                 <div class="grid grid-cols-7 gap-4 py-2">
@@ -52,7 +52,7 @@
                         <label for="">land Company Area</label>
                     </div>
                     <div class="col-span-6 ...">
-                        <input type="text" class="mt-1 block w-full border p-2 rounded-md" placeholder="">
+                        <input type="text" class="mt-1 block w-full border p-2 rounded-md" placeholder=""  :value="apiData.lc_area1">
                     </div>
                 </div>
                 <div class="grid grid-cols-7 gap-4 py-2">
@@ -61,8 +61,8 @@
                     </div>
                     <div class="col-span-6 ...">
                         <input type="text" class="mt-1 block w-full border p-2 rounded-md"
-                            placeholder="Please enter land Company Cade" autofocus v-model="add.code">
-                        <p v-if="errors.code" class="text-red text-sm mt-2">{{ errors.code }}</p>
+                            placeholder="Please enter land Company Cade" autofocus v-model="add.landCode">
+                        <p v-if="errors.landCode" class="text-red text-sm mt-2">{{ errors.landCode }}</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-7 gap-4 py-2">
@@ -70,7 +70,7 @@
                         <label for="">Phone namber 1</label>
                     </div>
                     <div class="col-span-6 ...">
-                        <input class="mt-1 block w-full border p-2 rounded-md " type="tel" placeholder="" value="">
+                        <input class="mt-1 block w-full border p-2 rounded-md " type="tel" placeholder="" :value="apiData.lc_phone1">
                     </div>
                 </div>
                 <div class="grid grid-cols-7 gap-4 py-2">
@@ -78,7 +78,7 @@
                         <label for="">Phone namber 2</label>
                     </div>
                     <div class="col-span-6 ...">
-                        <input class="mt-1 block w-full border p-2 rounded-md" type="tel" placeholder="" value="">
+                        <input class="mt-1 block w-full border p-2 rounded-md" type="tel" placeholder="" :value="apiData.lc_phone2">
                     </div>
                 </div>
                 <div class="flex justify-center space-x-4 py-8">
@@ -134,15 +134,49 @@
 
 <script setup>
 import Swal from 'sweetalert2'
-import { reactive, computed, ref } from 'vue'
+import { reactive, computed, ref, onMounted } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import apiClient from '@/../services/apiClient'
 import router from '../../router';
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const add = reactive({
-    code: '',
+    landCode: '',
 });
 const errors = reactive({
-    code: ''
+    landCode: ''
 })
+
+// Define a reactive array to store API data
+const apiData = reactive([]);
+// function getData Api
+const getData = async () => {
+    //get params url route
+    const id = route.params.id
+    // console.log("Params:" + id)
+    try {
+        const response = await apiClient.get(`/account/land/com/find/${id}`)
+        Object.assign(apiData, response.data)
+        // console.log(apiData.uid_user.email)
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+onMounted(() => {
+    getData()
+})
+// update land company Code
+const pathCode = async () => {
+    const id = route.params.id
+    try {
+        const response = await apiClient.patch(`/account/land/com/update/${id}`, {
+            uid: add.id,
+            lc_code: add.landCode,
+        });
+    } catch (error) {
+        console.log(error)
+    }
+}
 //button Disable
 const buttonDisabled = ref(true);
 // Alerts visibility
@@ -154,17 +188,17 @@ const showStep2 = () => {
     isStep2Dialog.value = true
     buttonDisabled.value = !buttonDisabled.value;
 }
-const edit = async () => {
-    if (add.code === '') {
-        errors.code = 'The data is invalid or cannot be empty';
+const edit = () => {
+    if (add.landCode === '') {
+        errors.landCode = 'The data is invalid or cannot be empty';
         return;
     }
-    if (add.code.length > 3) {
-        errors.code = 'The code must be longer than 3 characters';
+    if (add.landCode.length > 3) {
+        errors.landCode = 'The code must be longer than 3 characters';
         return;
     }
-    if (add.code !== add.code.toUpperCase()) {
-        errors.code = 'Your Land Company Code must consist of only 3 capital Englist leters';
+    if (add.landCode !== add.landCode.toUpperCase()) {
+        errors.landCode = 'Your Land Company Code must consist of only 3 capital Englist leters';
         return;
     }
     else {
@@ -185,15 +219,17 @@ const save = () => {
             customClass: {
                 actions: 'custom-actions' // Add custom class to the actions container
             }
-        }).then((result) => {
+        }).then( async(result) => {
             if (result.isConfirmed) {
-                Swal.fire({
+                await pathCode();
+                await Swal.fire({
                     title: 'successful',
                     icon: 'success',
+                    showConfirmButton: false,
                     timer: 2000
                 });
             }
-            router.push('/manage/land')
+            await router.push('/manage/land')
         });
     }
     catch (error) {

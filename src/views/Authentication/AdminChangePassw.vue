@@ -1,6 +1,6 @@
 
 <template>
-    <AdminLayout>
+    <DefaultLayout>
         <div class="container  mt-5 p-3 shadow-md  ...">
             <h1 class="font-bold text-xl mb-5 ">Edit information</h1>
             <div class="">
@@ -123,12 +123,12 @@
                 </div>
             </div>
         </div>
-    </AdminLayout>
+    </DefaultLayout>
 </template>
 <script setup>
 import Swal from 'sweetalert2'
 import { reactive, computed, ref} from 'vue';
-import AdminLayout from '@/layouts/AdminLayout.vue';
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
 
 const add = reactive({
     password: '12345',

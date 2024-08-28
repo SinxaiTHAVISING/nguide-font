@@ -121,35 +121,37 @@
                     <p v-if="errors.info" class="text-red text-sm mt-2">{{ errors.info }}</p>
                 </div>
             </div>
-            <div class="flex flex-col lg:flex-row gap-4 lg:gap-6 p-4">
+            <div class="flex flex-col gap-4 lg:gap-6 p-4">
                 <!-- Entrance Fee Section -->
-                <div class="flex-none lg:w-44  ">
+                <div class="flex-none lg:w-44">
                     <label for="entranceFee" class="block text-sm font-semibold">Entrance Fee</label>
-                    <button type="button" @click="addField()"
+                    <button type="button" @click="addField"
                         class="mt-2 px-4 py-2 font-semibold rounded-lg shadow-md w-full sm:w-auto text-sm btn-add">
                         &plus; Add
                     </button>
                 </div>
-                <!-- Input Fields Section -->
-                <div class="flex-1 flex flex-col lg:flex-row lg:gap-4 mt-4">
-                    <div class="flex-1 mb-4 lg:mb-0 lg:w-1/2">
+
+                <!-- Dynamic Input Fields Section -->
+                <div v-for="(field, index) in fields" :key="index"
+                    class="flex-1 flex flex-col lg:flex-row lg:gap-4 mt-4">
+                    <div class="flex-1 mb-4 lg:mb-0 ">
                         <input id="detailedAddress" type="text" class="mt-2 block w-full rounded-md p-2 border"
-                            placeholder="Please enter your option" v-model="add.option" />
+                            placeholder="Please enter your option" v-model="field.option" />
                     </div>
 
-                    <div class="relative mt-2 rounded-md shadow-sm flex-1 mb-4 lg:mb-0 lg:w-1/4">
+                    <div class="relative mt-2 rounded-md shadow-sm flex-1 mb-4 lg:mb-0">
                         <input type="text" name="price" id="price" class="block w-full rounded-md p-2 border"
-                            placeholder="Please enter specify amount" v-model="add.price">
+                            placeholder="Please enter specify amount" v-model="field.price">
                         <div class="absolute inset-y-0 right-0 flex items-center">
                             <span id="currency"
-                                class="font-bold rounded-md border-0  py-0 pl-2 pr-7 text-gray-500 sm:text-sm">
+                                class="font-bold rounded-md border-0 py-0 pl-2 pr-7 text-gray-500 sm:text-sm">
                                 USD
                             </span>
                         </div>
                     </div>
                     <!-- Trash Button -->
                     <div class="flex-none lg:w-20 lg:flex lg:justify-end">
-                        <button>
+                        <button @click="removeField(index)">
                             <Trash2 color="gray" :size="32" />
                         </button>
                     </div>
@@ -324,6 +326,18 @@ const remainingCharacters = computed(() => maxCommentLength - add.info.length);
 
 // Computed property to show current length and max length
 const characterCount = computed(() => `${add.info.length}/${maxCommentLength}`);
+const fields = ref([
+    { option: '', price: '' } // Initialize with one set of fields if needed
+])
+
+function addField() {
+    fields.value.push({ option: '', price: '' })
+}
+
+function removeField(index) {
+    fields.value.splice(index, 1)
+}
+
 </script>
 <style>
 .btn-add {

@@ -1,10 +1,11 @@
 <script setup>
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import AdminList from '../../components/AdminManage/AdminList.vue'
 </script>
 
 <template>
   <DefaultLayout>
-    <AdminList/>
+    <div class="text-center">
+      <h1> Dashboard Admin Develop </h1>
+    </div>
   </DefaultLayout>
 </template>

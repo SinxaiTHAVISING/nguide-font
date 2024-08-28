@@ -14,15 +14,18 @@
         </div>
         <div>
           <label for="password" class="block mb-2 text-sm font-medium text-white">Password</label>
-        <div class="relative mt-2 rounded-md shadow-sm flex-1 mb-4 ">
-          <input type="text" name="price" id="price" class="block w-full rounded-md p-2 border"
-            placeholder="Please enter specify amount" v-model="add.password">
-          <div class="absolute inset-y-0 right-0 flex items-center">
-            <button id="" class="font-bold rounded-md border-0  py-0 pr-5 text-gray-500 sm:text-sm">
-              <Eye />
-            </button>
+          <div class="relative mt-2 rounded-md shadow-sm flex-1 mb-4">
+            <input :type="isPasswordVisible ? 'text' : 'password'" id="password"
+              class="block w-full rounded-md p-2 border" placeholder="Please enter your password"
+              v-model="add.password" />
+            <div class="absolute inset-y-0 right-0 flex items-center">
+              <button class="font-bold rounded-md border-0 py-0 pr-3 text-gray-500 sm:text-sm "
+                @click="togglePasswordVisibility" type="button">
+                <Eye v-if="isPasswordVisible"/>
+                <EyeOff v-else />
+              </button>
+            </div>
           </div>
-        </div>
         </div>
         <button type="submit" id="button-login"
           class="w-full text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</button>
@@ -37,7 +40,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import apiClient from '@/../services/apiClient';
@@ -46,10 +49,13 @@ const add = reactive({
   id: '',
   password: ''
 })
-
 // Router instance
 const router = useRouter()
-
+// show-hidePassword
+const isPasswordVisible = ref(false)
+const togglePasswordVisibility = () => {
+  isPasswordVisible.value = !isPasswordVisible.value
+}
 // Login function
 const login = async () => {
   try {
@@ -58,25 +64,39 @@ const login = async () => {
       username: add.id,
       passwordHash: add.password,
     })
-
+    // save data to local storage
+    localStorage.clear();
+    localStorage.setItem('responeData', JSON.stringify(response.data));
     const usertype = response.data.usertype; // Respon User type
-    if (usertype === 1) {
-      router.push('/admin/change/password')
+    const id = response.data.uid; // Respon User id
+    const updated_at = response.data.updated_at; // Respon updated_at collumn
+    // console.log(updated_at)
+    if (usertype === 1 && updated_at === null) {
+      router.push(`/admin/change/password/${id}`)
+    } 
+    else if (usertype === 1 && updated_at !== null) {
+      router.push("/admin/info")
     }
-    else if (usertype === 2) {
-      router.push('/land/change/password')
-    } else if (usertype === 3) {
-      router.push('/op/change/password')
+    if (usertype === 2 && updated_at === null) {
+      router.push(`/land/change/password/${id}`);
+    }
+    else if (usertype === 2 && updated_at !== null) {
+      router.push("/myinfo")
+    }
+    if (usertype === 3 && updated_at === null) {
+      router.push(`/op/change/password/${id}`)
+    }
+    else if (usertype === 3 && updated_at !== null) {
+      router.push('/manage/operation')
     }
   } catch (error) {
     Swal.fire({
       icon: 'error',
       title: 'ID or Password is incorrect',
-      text: error.response?.data?.message || error.message
+      // text: error.response?.data?.message || error.message
     })
     console.error('Login failed:', error);
   }
-  // alert("username="+add.id+"--passwordHash="+add.password)
 }
 </script>
 
