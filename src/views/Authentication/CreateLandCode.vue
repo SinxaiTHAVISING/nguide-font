@@ -22,7 +22,7 @@
                 <h2 class="pb-3 ">Land company Informations</h2>
             </div>
             <hr class="pb-3">
-            <form action="" method="post">
+            <form  @submit.prevent="save">
                 <div class="grid grid-cols-7 gap-4 py-2">
                     <div class="...">
                         <label for="">Name Land company</label>
@@ -81,19 +81,7 @@
                         <input class="mt-1 block w-full border p-2 rounded-md" type="tel" placeholder="" :value="apiData.lc_phone2">
                     </div>
                 </div>
-                <div class="flex justify-center space-x-4 py-8">
-                    <button class="px-4 py-2  text-black border border-black font-semibold rounded-lg w-28" id="cancel">
-                        Cancel
-                    </button>
-                    <button class="px-4 py-2 text-white bg-gray-400 border border-black font-semibold rounded-lg w-28"
-                        id="edit" @click="save" :disabled="buttonDisabled">
-                        Save
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Alert Step 1 -->
+                 <!-- Alert Step 1 -->
         <div v-if="isStep1Dialog" class="flex w-96 rounded-md border border-[#ff7100]" id="guideAlert">
             <div class="basis-16 flex items-start h-15 w-6 rounded-full overflow-hidden">
                 <img src="../../../public/logo/LogoFull.png" class="object-cover w-full h-full" />
@@ -129,6 +117,17 @@
                 </div>
             </div>
         </div>
+                <div class="flex justify-center space-x-4 py-8">
+                    <button class="px-4 py-2  text-black border border-black font-semibold rounded-lg w-28" id="cancel">
+                        Cancel
+                    </button>
+                    <button class="px-4 py-2 text-white bg-gray-400 border border-black font-semibold rounded-lg w-28"
+                        id="edit" @click="save">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
     </DefaultLayout>
 </template>
 
@@ -139,6 +138,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import apiClient from '@/../services/apiClient'
 import router from '../../router';
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const add = reactive({
     landCode: '',
@@ -151,7 +151,7 @@ const errors = reactive({
 const apiData = reactive([]);
 // function getData Api
 const getData = async () => {
-    //get params url route
+    //get params url routes
     const id = route.params.id
     // console.log("Params:" + id)
     try {
@@ -167,12 +167,13 @@ onMounted(() => {
 })
 // update land company Code
 const pathCode = async () => {
-    const id = route.params.id
+    // const id = route.params.id
     try {
-        const response = await apiClient.patch(`/account/land/com/update/${id}`, {
-            uid: add.id,
+        //  await apiClient.patch(`/account/land/com/update/${id}`, {
+         await apiClient.patch(`/account/land/com/update/3`, {
             lc_code: add.landCode,
         });
+        // alert(id)
     } catch (error) {
         console.log(error)
     }
@@ -207,6 +208,7 @@ const edit = () => {
     }
 }
 const save = () => {
+    const id = route.params.id
     try {
         Swal.fire({
             text: "Would you like to edit your information?",
@@ -229,7 +231,7 @@ const save = () => {
                     timer: 2000
                 });
             }
-            await router.push('/manage/land')
+            await router.push(`/myland/${id}`)
         });
     }
     catch (error) {

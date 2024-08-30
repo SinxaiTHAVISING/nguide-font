@@ -1,27 +1,3 @@
-<script setup>
-import Swal from 'sweetalert2'
-const alertConfirm = () => {
-    Swal.fire({
-        text: "Would you like to edit your information?",
-        icon: "info",
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        cancelButtonText: "Cancel",
-        confirmButtonColor: "#f8b400",
-        cancelButtonColor: "#ffff",
-        customClass: {
-            actions: 'custom-actions' // Add custom class to the actions container
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire({
-                title: 'successful',
-                icon: 'success'
-            });
-        }
-    });
-}
-</script>
 <template>
         <h1 class="font-bold">Manage OP data</h1>
         <div class="container  mt-5 p-3 shadow-md  ...">
@@ -99,6 +75,31 @@ const alertConfirm = () => {
             </div>
         </div>
 </template>
+
+<script setup>
+import Swal from 'sweetalert2'
+const alertConfirm = () => {
+    Swal.fire({
+        text: "Would you like to edit your information?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#f8b400",
+        cancelButtonColor: "#ffff",
+        customClass: {
+            actions: 'custom-actions' // Add custom class to the actions container
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'successful',
+                icon: 'success'
+            });
+        }
+    });
+}
+</script>
 
 <style>
 /* Custom CSS for button positioning in SweetAlert2 */

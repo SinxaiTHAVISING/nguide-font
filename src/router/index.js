@@ -30,6 +30,7 @@ import AdminlistLand from '../views/AdminManageLand/LandList.vue'
 import AdminlistLandDetail from '../views/AdminManageLand/LandDetail.vue'
 import AdminlistLandRegister from '../views/AdminManageLand/LandRegister.vue'
 import AdminInfo from '../views/AdminInfo/MyInfo.vue'
+import AdminEditInfo from '../views/AdminInfo/AdminEditInfo.vue'
 
 
 const routes = [
@@ -127,7 +128,7 @@ const routes = [
 
   // My information
   {
-    path: '/myinfo',
+    path: '/myinfo/:id',
     name: 'myinfo',
     component: MyInfo,
     meta: {
@@ -135,7 +136,7 @@ const routes = [
     }
   },
   {
-    path: '/edit/myinfo',
+    path: '/edit/myinfo/:id',
     name: 'Editmyinfo',
     component: EditMyInfo,
     meta: {
@@ -143,7 +144,7 @@ const routes = [
     }
   },
   {
-    path: '/myland',
+    path: '/myland/:id',
     name: 'myland',
     component: MyLand,
     meta: {
@@ -151,7 +152,7 @@ const routes = [
     }
   },
   {
-    path: '/edit/myland',
+    path: '/edit/myland/:id',
     name: 'EditMyland',
     component: EditMyland,
     meta: {
@@ -193,7 +194,7 @@ const routes = [
     }
   },
   {
-    path: '/admin/detail',
+    path: '/admin/detail/:adm_id',
     name: 'AdminDetail',
     component: AdminDetail,
     meta: {
@@ -233,11 +234,19 @@ const routes = [
     }
   },
   {
-    path: '/admin/info',
+    path: '/admin/info/:id',
     name: 'AdminInfo',
     component: AdminInfo,
     meta: {
       title: 'AdminInfo'
+    }
+  },
+  {
+    path: '/admin/edit/info/:id',
+    name: 'AdminEditInfo',
+    component: AdminEditInfo,
+    meta: {
+      title: 'AdminEditInfo'
     }
   },
 ]

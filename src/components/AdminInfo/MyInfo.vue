@@ -25,7 +25,7 @@
                     <label for="">Name</label>
                 </div>
                 <div class="col-span-6 ...">
-                    <input class="border p-2 mt-1 block w-full  rounded-md" placeholder="">
+                    <input class="border p-2 mt-1 block w-full  rounded-md" placeholder="" :value="apiData.adm_name">
                 </div>
             </div>
             <div class="grid grid-cols-7 gap-4 py-2">
@@ -33,7 +33,8 @@
                     <label for="">ID</label>
                 </div>
                 <div class="col-span-6 ...">
-                    <input class="border p-2 mt-1 block w-full  rounded-md" type="text" placeholder="">
+                    <input class="border p-2 mt-1 block w-full  rounded-md" type="text" placeholder=""
+                        :value="apiData.uid_user?.username">
                 </div>
             </div>
             <div class="grid grid-cols-7 gap-4 py-2">
@@ -41,15 +42,17 @@
                     <label for="">Phone number</label>
                 </div>
                 <div class="col-span-6 ...">
-                    <input class="border p-2 mt-1 block w-full  rounded-md" type="text" placeholder="">
+                    <input class="border p-2 mt-1 block w-full  rounded-md" type="text" placeholder=""
+                        :value="apiData.adm_phone">
                 </div>
             </div>
             <div class="grid grid-cols-7 gap-4 py-2">
                 <div class="...">
-                    <label for="">Land Conpany Area</label>
+                    <label for="">Address</label>
                 </div>
                 <div class="col-span-6 ...">
-                    <input class="border p-2 mt-1 block w-full  rounded-md " type="text" placeholder="" value="">
+                    <input class="border p-2 mt-1 block w-full  rounded-md " type="text" placeholder=""
+                        :value="apiData.adm_addr">
                 </div>
             </div>
         </form>
@@ -62,15 +65,15 @@
             </div>
             <div class="p-1 text-black">
                 <input type="password" name="" id="" class="w-full p-2 border rounded"
-                    placeholder="Please enter your password" v-model="add.password">
-                    <p v-if="errors.password" class="text-red text-sm mt-2">{{ errors.password }}</p>
+                    placeholder="Please enter your password" v-model="add.conPassword">
+                <p v-if="errors.conPassword" class="text-red text-sm mt-2">{{ errors.conPassword }}</p>
             </div>
             <div class="flex justify-center mt-5">
                 <button @click="Cancel"
                     class="rounded-xl border px-3 py-1 font-bold mt-1 w-20 mx-2 hover:bg-[#132d5c] hover:text-white">
                     Cancel
                 </button>
-                <button @click="editfrom"
+                <button @click="sendPassword"
                     class="rounded-xl border px-3 py-1 font-bold mt-1 text-white bg-[#132d5c] hover:bg-white hover:text-black w-20 mx-2">
                     OK
                 </button>
@@ -80,15 +83,37 @@
 
 </template>
 <script setup>
-import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router'
+import apiClient from '@/../services/apiClient';
+import { reactive, computed, ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
 const router = useRouter()
 const add = reactive({
-    password: ''
+    conPassword: ''
 })
 const errors = reactive({
-    password: ''
+    conPassword: ''
 })
+
+const apiData = reactive([]);
+// function getData Api
+const getData = async () => {
+    //get params url routes
+    const id = route.params.id
+    // console.log("Params:" + id)
+    try {
+        const response = await apiClient.get(`/account/admin/${id}`)
+        Object.assign(apiData, response.data)
+        // console.log(apiData.uid_user.email)
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+onMounted(() => {
+    getData()
+})
+
 const editfrom = async () => {
     // Reset error messages
     Object.keys(errors).forEach(key => errors[key] = '');
@@ -96,9 +121,6 @@ const editfrom = async () => {
     if (add.password === '') {
         errors.password = 'The data is invalid or cannot be empty';
     }
-    // else{
-    //     router.push('')
-    // }
 }
 const dialogVisible = ref(false);
 // const password = ref('');
@@ -111,6 +133,25 @@ let Cancel = () => {
     dialogVisible.value = false;
 };
 
+// check password
+const sendPassword = async () => {
+    if (add.conPassword === '') {
+        errors.conPassword = 'Password is not empty'
+    }
+    else {
+        try {
+            const id = route.params.id
+            const userid = id
+            const response = await apiClient.post(`/account/confirm/password/${userid}`, {
+                passwordHash: add.conPassword,
+            })
+            router.push(`/admin/edit/info/${userid}`)
+        } catch (error) {
+            console.error('Error:', error);
+            errors.conPassword = 'Password is incorrect'
+        }
+    }
+};
 </script>
 
 <style>

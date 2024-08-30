@@ -45,7 +45,7 @@
                 <tr v-for="(member, index) in apiData" :key="index">
                     <td class="px-4 py-2 border">{{ index+1 }}</td>
                     <td class="px-4 py-2 border">{{ member.adm_name }}</td>
-                    <td class="px-4 py-2 border">{{ member.adm_id }}</td>
+                    <td class="px-4 py-2 border">{{ member.uid_user.username }}</td>
                     <td class="px-4 py-2 border">{{ member.adm_addr }}</td>
                     <td class="px-4 py-2 border">{{ member.created_at }}</td>
                     <td class="px-4 py-2 text-center border">

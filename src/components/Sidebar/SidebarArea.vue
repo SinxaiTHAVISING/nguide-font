@@ -4,7 +4,8 @@ import { onClickOutside } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import { LayoutGrid, CableCar, NotebookPen, ChevronDown, MessageSquare, IdCard, Building2 } from 'lucide-vue-next';
-
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const target = ref(null)
 const sidebarStore = useSidebarStore()
 
@@ -21,11 +22,14 @@ const infoOpen = ref(false);
 const toggleInfo = () => {
   infoOpen.value = !infoOpen.value;
 };
-
+const id = route.params.id
 const userType = ref(null);
+const uid = ref(null);
 function getLocal () {
   const data = JSON.parse(localStorage.getItem('responeData')) 
   userType.value = data.usertype;
+  uid.value = data.uid;
+  // const id = route.params.id
 }
 onMounted(() => {
   getLocal();
@@ -108,7 +112,7 @@ onMounted(() => {
             <span class="ms-3">Chatting</span>
           </router-link>
         </li>
-        <li v-if="userType === 2 || userType === 3" class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+        <li v-if="userType === 2 || userType === 3 " class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
           <router-link to=""
             class="flex items-center text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <NotebookPen />
@@ -117,7 +121,7 @@ onMounted(() => {
           <ChevronDown class="lg:ml-3 md:ml-2 cursor-pointer" :class="{ 'rotate-180': infoOpen }" @click="toggleInfo" />
           <transition name="fade">
             <ul v-show="infoOpen" class="absolute mt-2 w-48 overflow-auto z-10" :style="{ top: '100%' }">
-              <router-link :to="{ name: 'myinfo' }">
+              <router-link :to="`/myinfo/${id}`">
                 <li class="p-2">Manage My Info</li>
               </router-link>
               <router-link :to="{ name: 'myland' }">
@@ -142,7 +146,7 @@ onMounted(() => {
         </li>
         <li v-if="userType === 1"
           class="relative flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-          <router-link to="/admin/info"
+          <router-link :to="`/admin/info/${uid}`"
             class="flex items-center text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <NotebookPen />
             <span class="ms-3">My information</span>
